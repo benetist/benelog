@@ -2,6 +2,7 @@ package benelog
 
 import (
 	"context"
+	"fmt"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
 	"os"
@@ -85,6 +86,6 @@ func Logger(ctx context.Context) zap.Logger {
 			newLogger = *newLogger.With(zap.String("sessionId", ctxSessionId))
 		}
 	}
-	print("%v\n", newLogger)
+	fmt.Printf("%v\n", newLogger)
 	return newLogger
 }
