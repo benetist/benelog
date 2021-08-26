@@ -85,6 +85,6 @@ func Logger(ctx context.Context) zap.Logger {
 			newLogger = *newLogger.With(zap.String("sessionId", ctxSessionId))
 		}
 	}
-	print(newLogger)
+	print("%v\n", newLogger)
 	return newLogger
 }
