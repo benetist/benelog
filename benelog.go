@@ -41,8 +41,8 @@ func NewLogger(options ...zap.Option) (*zap.Logger, error) {
 		Sampling:          nil,
 		Encoding:          "json",
 		EncoderConfig:     logConfig,
-		OutputPaths:       nil,
-		ErrorOutputPaths:  nil,
+		OutputPaths:       []string{"stdout"},
+		ErrorOutputPaths:  []string{"stderr"},
 		InitialFields:     nil,
 	}
 	fields := zap.Fields(zap.Int("pid", os.Getpid()),
