@@ -62,11 +62,13 @@ func init() {
 
 // WithRqId returns a context which knows its request ID
 func WithRqId(ctx context.Context, rqId string) context.Context {
+	print("WithRqId")
 	return context.WithValue(ctx, requestIdKey, rqId)
 }
 
 // WithSessionId returns a context which knows its session ID
 func WithSessionId(ctx context.Context, sessionId string) context.Context {
+	print("WithSessionId")
 	return context.WithValue(ctx, sessionIdKey, sessionId)
 }
 
@@ -75,9 +77,11 @@ func Logger(ctx context.Context) zap.Logger {
 	newLogger := logger
 	if ctx != nil {
 		if ctxRqId, ok := ctx.Value(requestIdKey).(string); ok {
+			print("trying rqid")
 			newLogger = *newLogger.With(zap.String("rqId", ctxRqId))
 		}
 		if ctxSessionId, ok := ctx.Value(sessionIdKey).(string); ok {
+			print("trying sessionid")
 			newLogger = *newLogger.With(zap.String("sessionId", ctxSessionId))
 		}
 	}
