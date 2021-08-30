@@ -2,7 +2,6 @@ package benelog
 
 import (
 	"context"
-	"fmt"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
 	"os"
@@ -54,7 +53,6 @@ func NewLogger(options ...zap.Option) (*zap.Logger, error) {
 
 func init() {
 	tmpLogger, err := NewLogger()
-	print("Hello friend")
 	if err != nil {
 		panic("error creating simple logger")
 	}
@@ -63,13 +61,11 @@ func init() {
 
 // WithRqId returns a context which knows its request ID
 func WithRqId(ctx context.Context, rqId string) context.Context {
-	print("WithRqId\n")
 	return context.WithValue(ctx, requestIdKey, rqId)
 }
 
 // WithSessionId returns a context which knows its session ID
 func WithSessionId(ctx context.Context, sessionId string) context.Context {
-	print("WithSessionId\n")
 	return context.WithValue(ctx, sessionIdKey, sessionId)
 }
 
@@ -78,14 +74,11 @@ func Logger(ctx context.Context) zap.Logger {
 	newLogger := logger
 	if ctx != nil {
 		if ctxRqId, ok := ctx.Value(requestIdKey).(string); ok {
-			print("trying rqid\n")
 			newLogger = *newLogger.With(zap.String("rqId", ctxRqId))
 		}
 		if ctxSessionId, ok := ctx.Value(sessionIdKey).(string); ok {
-			print("trying sessionid\n")
 			newLogger = *newLogger.With(zap.String("sessionId", ctxSessionId))
 		}
 	}
-	fmt.Printf("%v\n", newLogger)
 	return newLogger
 }
