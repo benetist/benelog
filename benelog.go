@@ -6,6 +6,7 @@ import (
 	"go.uber.org/zap/zapcore"
 	"os"
 	"path"
+	"strings"
 )
 
 type correlationIdType int
@@ -18,6 +19,22 @@ const (
 var logger zap.Logger
 
 func NewLogger(options ...zap.Option) (*zap.Logger, error) {
+
+	// TODO: allow this as an input, instead of an environment variable?
+	logLevelEnv := os.Getenv("BENE_LOG_LEVEL")
+	var logLevel zapcore.Level
+	if strings.ToLower(logLevelEnv) == "debug" {
+		logLevel = zapcore.DebugLevel
+	} else if strings.ToLower(logLevelEnv) == "warn" {
+		logLevel = zapcore.WarnLevel
+	} else if strings.ToLower(logLevelEnv) == "error" {
+		logLevel = zapcore.ErrorLevel
+	} else if strings.ToLower(logLevelEnv) == "panic" {
+		logLevel = zapcore.PanicLevel
+	} else {
+		// the default
+		logLevel = zapcore.InfoLevel
+	}
 	logConfig := zapcore.EncoderConfig{
 		MessageKey:     "msg",
 		LevelKey:       "level",
@@ -33,7 +50,7 @@ func NewLogger(options ...zap.Option) (*zap.Logger, error) {
 		EncodeCaller:   zapcore.ShortCallerEncoder,
 	}
 	cfg := zap.Config{
-		Level:             zap.NewAtomicLevelAt(zapcore.InfoLevel),
+		Level:             zap.NewAtomicLevelAt(logLevel),
 		Development:       false,
 		DisableCaller:     false,
 		DisableStacktrace: false,
